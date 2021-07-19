@@ -19,11 +19,37 @@
   justify-content: center;
 }
 .pokemonItem {
-  border: 1px solid #eee;
-  width: 200px;
+  border: 1px solid #ddd;
+  width: 100px;
   display: flex;
   justify-content: center;
   flex-direction: column;
+  position: relative;
+  margin: 0 -1px -1px 0;
+}
+.pokemonID {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 1px 3px;
+}
+.pokemonGeneration {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-weight: bold;
+  font-size: 12px;
+  /* background: #ddd; */
+  padding: 1px 3px;
+}
+.pokemonSpriteWrap {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5px;
 }
 .pokemonSprite {
   max-width: 100%;
@@ -31,9 +57,14 @@
 .pokemonName {
   font-size: 14px;
   text-align: center;
+  text-transform: capitalize;
 }
 .pokemonCP {
   font-size: 30px;
   font-weight: bold;
   text-align: center;
+}
+.pokemonData {
+  text-align: center;
+  font-size: 12px;
 }
