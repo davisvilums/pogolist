@@ -1,7 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 
-import { fetchPokemonData } from './components/GetData';
 import GetDataGrahp from './components/GetDataGrahp';
 import PokemonCard from './components/PokemonCard';
 
@@ -14,8 +13,6 @@ function sortPokemonBy(pokeList, sortBy, order = 0) {
 
 function App() {
   const newPokeList = GetDataGrahp();
-  console.log('newPokeList', newPokeList);
-  // return <div>my return div</div>;
   const [pokemonList, setpokemonList] = useState(
     JSON.parse(localStorage.getItem('pokelist')) || ''
   );
@@ -26,27 +23,14 @@ function App() {
     gen: [],
   });
 
+  // if (newPokeList) {
+  // }
   useEffect(() => {
     if (!pokemonList) {
-      fetchPokemonData(callBackAfter);
+      setpokemonList(newPokeList);
+      localStorage.setItem('pokelist', newPokeList);
     }
-  }, []);
-
-  useEffect(() => {
-    runFilter();
-  }, [pokemonList]);
-
-  useEffect(() => {
-    if (filteredList) {
-      sortPokemon('cp', 1);
-    }
-  }, [filteredList]);
-
-  function callBackAfter(pl) {
-    localStorage.setItem('pokelist', JSON.stringify(pl));
-    setpokemonList(pl);
-    setUpdateList(updateList + 1);
-  }
+  }, [newPokeList]);
 
   function sortPokemon(by, newOrder) {
     var order = newOrder;
@@ -74,29 +58,9 @@ function App() {
     var pl = pokemonList;
     var gens = [1, 2, 3, 4, 5, 6, 7, 8];
     var plarr = [
-      // 'unown-',
       // '-gmax',
-      // '-totem',
-      // '-eternamax',
       // '-primal',
-      // 'pikachu-',
-      // 'arceus-',
-      // 'genesect-',
-      // 'vivillon-',
-      // 'flabebe-',
-      // 'floette-',
-      // 'florges-',
-      // 'furfrou-',
-      // 'pumpkaboo-',
-      // 'gourgeist-',
-      // 'zygarde-10',
       // 'rockruff-own-tempo',
-      // 'silvally-',
-      // 'minior-',
-      // 'toxtricity-low-key',
-      // 'darmanitan-zen',
-      // '-ash',
-      // '-busted',
       // '-mega',
     ];
 
@@ -140,8 +104,9 @@ function App() {
         </div>
       </div>
       <div className='PokemonList'>
-        {filteredList &&
-          filteredList.map((pokemon, index) => (
+        {pokemonList &&
+          pokemonList.map((pokemon, index) => (
+            // <div>{pokemon.name}</div>
             <PokemonCard
               pokemon={pokemon}
               key={index}

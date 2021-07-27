@@ -46,7 +46,6 @@ function GetDataGrahp() {
       .then((result) => {
         var pokemons = result.data.pokemon_v2_pokemon;
         var pokeList = new Array();
-        // console.log(pokemons);
         for (const pokemon of pokemons) {
           var pok = new Object();
           pok.cp = GetPokemonCP(pokemon.pokemon_v2_pokemonstats);
@@ -54,21 +53,10 @@ function GetDataGrahp() {
           pok.order = pokemon.order;
           pok.id = pokemon.id;
           pok.kind = 'normal';
-          pok.gen = pokemon.generation_id;
+          pok.gen = pokemon.pokemon_v2_pokemonspecy.generation_id;
 
-          //   pok.sprite: sprite,
           pok.visible = true;
           pok.released = true;
-
-          //   console.log(
-          //     pokemon.pokemon_v2_pokemonforms[0].is_default,
-          //     pokemon.pokemon_v2_pokemonforms[0].is_mega
-          //   );
-          //   console.log(
-          //     pokemon.pokemon_v2_pokemonspecy.is_baby,
-          //     pokemon.pokemon_v2_pokemonspecy.is_legendary,
-          //     pokemon.pokemon_v2_pokemonspecy.is_mythical
-          //   );
 
           if (pokemon.order < 0) {
             var evPoId =
@@ -88,70 +76,71 @@ function GetDataGrahp() {
             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' +
             pok.id +
             '.png';
-          if (pokemon.pokemon_v2_pokemonforms[1]) {
+
+          var excludeList = [
+            10410, 10217, 10341, 10122, 10121, 10122, 10121, 10061, 10162,
+            10095, 10086, 10130, 10131, 10132, 10133, 10134, 10135, 10137,
+            10138, 10139, 10140, 10141, 10142, 10137, 10143, 10144, 10145,
+            10147, 10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095,
+            10096, 10097, 10098, 10099, 10148, 10057, 10085, 10232, 10233,
+            10234, 10235, 10236, 10237, 10238, 10239, 10240, 10241, 10242,
+            10243, 10244, 10245, 10246, 10247, 10248, 10153, 10128, 10151,
+            10118, 10027, 10028, 10029, 10030, 10031, 10032, 10129, 10154,
+            10150, 10146, 10093, 10149,
+          ];
+          var rawList = [
+            10093, 10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095,
+            10096, 10097, 10098, 10099, 10148, 10149, 10065, 10057, 10085,
+            10017, 10175, 10116, 10117, 876, 10406, 10179, 877, 10130,
+          ];
+          //Scatterbug, Spewpa, Vivillon
+          if (rawList.includes(pok.id))
+            pok.sprite =
+              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
+              pok.id +
+              '.png';
+
+          if (pok.name.includes('castform-')) {
+            var evArr = pok.name.split('castform');
+            var newname = 351 + evArr[1] + '.svg';
+            pok.sprite =
+              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
+              newname;
+          }
+
+          var includeForms = [412, 413, 421, 422, 423, 585, 586];
+          if (
+            pokemon.pokemon_v2_pokemonforms[1] &&
+            includeForms.includes(pok.id)
+          ) {
             var forms = pokemon.pokemon_v2_pokemonforms;
-            // console.log(pokemon.pokemon_v2_pokemonforms, 'FORMS');
 
             forms.map((form, index) => {
               var pokf = Object.assign({}, pok);
               pokf.id = form.id;
               pokf.name = form.name;
-              //   pokf.imgname = pokf.id + form.name;
               var newname = form.name.split('-');
-              //   console.log(newname, 'newname1');
-              if (newname.length > 0) {
-                // newname = newname.shift().join('-');
-                // newname =
+              if (newname.length > 0 && index > 0) {
                 pokf.imgname = pok.id + '-' + newname[1];
-                // console.log(pokf.imgname);
                 pokf.sprite =
                   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
-                  pok.imgname +
+                  pokf.imgname +
                   '.svg';
-              }
-              //   var newname = form.name.split('-').shift().join('-');
-              //   console.log(newname);
 
-              pokeList.push(pokf);
+                var rawList2 = [664, 665, 666, 676, 670, 671, 773, 774, 10136];
+                if (rawList2.includes(pok.id)) {
+                  pokf.sprite =
+                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
+                    pokf.imgname +
+                    '.png';
+                }
+              }
+              if (!excludeList.includes(pokf.id)) pokeList.push(pokf);
             });
           } else {
-            pokeList.push(pok);
+            if (!excludeList.includes(pok.id)) pokeList.push(pok);
           }
         }
-        // pokeList = pokeList.map((pok, index) => {
-        //   //   console.log(pok.name, pok.id, pok.order);
-        //   var img1 =
-        //     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' +
-        //     pok.id +
-        //     '.png';
-
-        //   fetch(img1, { method: 'HEAD' })
-        //     .then((res) => {
-        //       if (res.ok) {
-        //         // console.log('EXISTS', img1);
-        //         pok.sprite = img1;
-        //       } else {
-        //         if (pok.imgname) {
-        //           var img2 =
-        //             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
-        //             pok.imgname +
-        //             '.svg';
-        //           //   console.log(img2, 'IMG2');
-        //           pok.sprite = img2;
-        //         }
-        //         // console.log(pok.name);
-        //         // console.log('FAILS', img1);
-        //         // var img2 =
-        //         //   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/' +
-        //         //   pok.imgname +
-        //         //   '.svg' +
-        //         //   pok.id +
-        //         //   '.svg';
-        //       }
-        //     })
-        //     .catch((err) => console.log('Error:', err));
-        // });
-        // console.log(pokeList, 'EXPORT');
         setpokemonList(pokeList);
       });
   }, []);
