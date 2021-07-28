@@ -1,15 +1,19 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSortBy } from 'react';
 
+import PokeTable from './components/PokeTable';
 import GetDataGrahp from './components/GetDataGrahp';
-import PokemonCard from './components/PokemonCard';
 
 function sortPokemonBy(pokeList, sortBy, order = 0) {
   if (pokeList) {
-    return pokeList.sort((a, b)=>{
+    return pokeList.sort((a, b) => {
       var sort = 0;
-      if(a[sortBy] < b[sortBy]) { sort= -1; }
-      if(a[sortBy] > b[sortBy]) { sort= 1; }
+      if (a[sortBy] < b[sortBy]) {
+        sort = -1;
+      }
+      if (a[sortBy] > b[sortBy]) {
+        sort = 1;
+      }
       if (order) sort = -sort;
       return sort;
     });
@@ -17,8 +21,21 @@ function sortPokemonBy(pokeList, sortBy, order = 0) {
 }
 
 function App() {
+  const [pokemonData, setPokemonData] = useState(
+    JSON.parse(localStorage.getItem('pokelist')) || []
+  );
+  const [q, setQ] = useState('');
+
+  useEffect(async () => {
+    if (!pokemonList) {
+      newPokeList = await GetDataGrahp();
+      setPokemonData(newPokeList);
+      localStorage.setItem('pokelist', JSON.stringify(newPokeList));
+    }
+  }, []);
+
   const [pokemonList, setpokemonList] = useState(
-    JSON.parse(localStorage.getItem('pokelist')) || ''
+    JSON.parse(localStorage.getItem('pokelist')) || []
   );
   const [filteredList, setFilteredList] = useState(pokemonList);
   const [updateList, setUpdateList] = useState(1);
@@ -29,18 +46,6 @@ function App() {
   var newPokeList;
   if (!pokemonList) {
   }
-
-
-  useEffect(async () => {
-    if (!pokemonList) {
-      newPokeList = await GetDataGrahp();
-      localStorage.setItem('pokelist', JSON.stringify(newPokeList));
-      setpokemonList(newPokeList);
-    }
-  }, []);
-  useEffect(() => {
-    runFilter()
-  }, [pokemonList]);
 
   function sortPokemon(by, newOrder) {
     var order = newOrder;
@@ -65,11 +70,7 @@ function App() {
     if (!pokemonList) return;
     var pl = pokemonList;
     var gens = [1, 2, 3, 4, 5, 6, 7, 8];
-    var plarr = [
-      '-gmax',
-      '-primal',
-      '-mega',
-    ];
+    var plarr = ['-gmax', '-primal', '-mega'];
 
     for (const filterName of plarr) {
       pl = pl.filter((p) => !p.name.includes(filterName));
@@ -88,6 +89,11 @@ function App() {
     setFilteredList(pl);
   }
 
+  function search(rows) {
+    return rows.filter((row) => row.name.toLowerCase().indexOf(q) > -1);
+  }
+  const columns = pokemonData[0] && Object.keys(pokemonData[0]);
+
   return (
     <div className='App'>
       <div className='TitleSection'>
@@ -99,20 +105,19 @@ function App() {
           <button onClick={() => sortPokemon('gen')}>Gen</button>
           <button onClick={() => sortPokemon('name')}>Name</button>
         </div>
+
+        <div>
+          {pokemonData[0] &&
+            columns.map((heading) => <strong> {heading} </strong>)}
+        </div>
+        <div>
+          <input type='text' value={q} onChange={(e) => setQ(e.target.value)} />
+        </div>
         <div>
           {sorting.order} - {sorting.cat} - {updateList}
         </div>
       </div>
-      <div className='PokemonList'>
-        {filteredList &&
-          filteredList.map((pokemon, index) => (
-            <PokemonCard
-              pokemon={pokemon}
-              key={index}
-              removePokemon={removePokemon}
-            />
-          ))}
-      </div>
+      <PokeTable data={search(pokemonData)} />
     </div>
   );
 }
