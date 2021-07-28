@@ -1,123 +1,63 @@
 import './App.css';
-import { useState, useEffect, useSortBy } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import PokeTable from './components/PokeTable';
+import SortingFields from './components/SortingFields';
 import GetDataGrahp from './components/GetDataGrahp';
-
-function sortPokemonBy(pokeList, sortBy, order = 0) {
-  if (pokeList) {
-    return pokeList.sort((a, b) => {
-      var sort = 0;
-      if (a[sortBy] < b[sortBy]) {
-        sort = -1;
-      }
-      if (a[sortBy] > b[sortBy]) {
-        sort = 1;
-      }
-      if (order) sort = -sort;
-      return sort;
-    });
-  }
-}
 
 function App() {
   const [pokemonData, setPokemonData] = useState(
-    JSON.parse(localStorage.getItem('pokelist')) || []
+    JSON.parse(localStorage.getItem('pokelist')) || ''
   );
   const [q, setQ] = useState('');
+  const [sorting, setSorting] = useState({ field: '', order: '' });
 
   useEffect(async () => {
-    if (!pokemonList) {
-      newPokeList = await GetDataGrahp();
+    if (!pokemonData) {
+      let newPokeList = await GetDataGrahp();
       setPokemonData(newPokeList);
       localStorage.setItem('pokelist', JSON.stringify(newPokeList));
     }
   }, []);
 
-  const [pokemonList, setpokemonList] = useState(
-    JSON.parse(localStorage.getItem('pokelist')) || []
-  );
-  const [filteredList, setFilteredList] = useState(pokemonList);
-  const [updateList, setUpdateList] = useState(1);
-  const [sorting, setSorting] = useState({ order: 1, cat: 'cp' });
-  const [filters, setfilters] = useState({
-    gen: [],
-  });
-  var newPokeList;
-  if (!pokemonList) {
-  }
+  const pokemonComp = useMemo(() => {
+    let pokemonList = pokemonData;
+    if (sorting.field) {
+      console.log(sorting);
+      const reversed = sorting.order === 'asc' ? 1 : -1;
+      pokemonList.sort((a, b) => {
+        var sort = a[sorting.field] > b[sorting.field] ? -1 : 1;
+        return reversed * sort;
+      });
 
-  function sortPokemon(by, newOrder) {
-    var order = newOrder;
-    if (!newOrder) order = sorting.order;
-    if (by == sorting.cat) order = sorting.order ? 0 : 1;
-    var pokemonListSorted = sortPokemonBy(filteredList, by, order);
-    if (filteredList != pokemonListSorted) setFilteredList(pokemonListSorted);
-    setSorting({ order: order, cat: by });
-  }
-  function removePokemon(id) {
-    var index = filteredList.findIndex(function (o) {
-      return o.id === id;
-    });
-    if (index !== -1) filteredList.splice(index, 1);
-
-    // pokemonList
-    setFilteredList(filteredList);
-    setUpdateList(updateList + 1);
-  }
-
-  function runFilter() {
-    if (!pokemonList) return;
-    var pl = pokemonList;
-    var gens = [1, 2, 3, 4, 5, 6, 7, 8];
-    var plarr = ['-gmax', '-primal', '-mega'];
-
-    for (const filterName of plarr) {
-      pl = pl.filter((p) => !p.name.includes(filterName));
+      // ADD FILTERS HERE
     }
-
-    pl = pl.filter((p) => !p.kind.includes('legendary'));
-    pl = pl.filter((p) => !p.kind.includes('mythical'));
-    // pl = pl.filter((p) => !p.kind.includes('normal'));
-
-    pl = pl.filter((p) => gens.includes(p.gen));
-
-    // pl = pl.filter((p) => p.released);
-    // pl.map((p, index) => {
-    // });
-
-    setFilteredList(pl);
-  }
+    return pokemonList;
+  }, [pokemonData, sorting]);
 
   function search(rows) {
     return rows.filter((row) => row.name.toLowerCase().indexOf(q) > -1);
   }
-  const columns = pokemonData[0] && Object.keys(pokemonData[0]);
 
   return (
     <div className='App'>
       <div className='TitleSection'>
-        <h1>Pokemon Stats</h1>
-        <div className='Sorting'>
-          <button onClick={() => sortPokemon('cp')}>CP</button>
-          <button onClick={() => sortPokemon('id')}>ID</button>
-          <button onClick={() => sortPokemon('order')}>Family</button>
-          <button onClick={() => sortPokemon('gen')}>Gen</button>
-          <button onClick={() => sortPokemon('name')}>Name</button>
-        </div>
+        <h1>Pokemon</h1>
 
         <div>
-          {pokemonData[0] &&
-            columns.map((heading) => <strong> {heading} </strong>)}
+          <SortingFields
+            data={pokemonComp}
+            onSorting={(field, order) => setSorting({ field, order })}
+          />
         </div>
         <div>
           <input type='text' value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
         <div>
-          {sorting.order} - {sorting.cat} - {updateList}
+          {sorting.field} - {sorting.order}
         </div>
       </div>
-      <PokeTable data={search(pokemonData)} />
+      <PokeTable data={pokemonComp} />
     </div>
   );
 }
