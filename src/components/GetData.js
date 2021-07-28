@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ReleasedList } from './ReleasedList';
+import { ReleasedList } from '../datasets/ReleasedList';
 import GetPokemonCP from './GetPokemonCP';
 
 function getSVGlink(sprite) {

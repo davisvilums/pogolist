@@ -46,7 +46,6 @@ function App() {
     var order = newOrder;
     if (!newOrder) order = sorting.order;
     if (by == sorting.cat) order = sorting.order ? 0 : 1;
-    console.log(by);
     var pokemonListSorted = sortPokemonBy(filteredList, by, order);
     if (filteredList != pokemonListSorted) setFilteredList(pokemonListSorted);
     setSorting({ order: order, cat: by });
@@ -93,14 +92,6 @@ function App() {
     <div className='App'>
       <div className='TitleSection'>
         <h1>Pokemon Stats</h1>
-        {/* <div>
-          <ul>
-            <li>
-              <input type='checkbox' />
-              G1
-            </li>
-          </ul>
-        </div> */}
         <div className='Sorting'>
           <button onClick={() => sortPokemon('cp')}>CP</button>
           <button onClick={() => sortPokemon('id')}>ID</button>
@@ -115,7 +106,6 @@ function App() {
       <div className='PokemonList'>
         {filteredList &&
           filteredList.map((pokemon, index) => (
-            // <div>{pokemon.name}</div>
             <PokemonCard
               pokemon={pokemon}
               key={index}
