@@ -6,8 +6,13 @@ import PokemonCard from './components/PokemonCard';
 
 function sortPokemonBy(pokeList, sortBy, order = 0) {
   if (pokeList) {
-    if (order) return pokeList.sort((a, b) => -b[sortBy] + a[sortBy]);
-    else return pokeList.sort((a, b) => b[sortBy] - a[sortBy]);
+    return pokeList.sort((a, b)=>{
+      var sort = 0;
+      if(a[sortBy] < b[sortBy]) { sort= -1; }
+      if(a[sortBy] > b[sortBy]) { sort= 1; }
+      if (order) sort = -sort;
+      return sort;
+    });
   }
 }
 
@@ -47,11 +52,9 @@ function App() {
     setSorting({ order: order, cat: by });
   }
   function removePokemon(id) {
-    console.log(id);
     var index = filteredList.findIndex(function (o) {
       return o.id === id;
     });
-    console.log(index);
     if (index !== -1) filteredList.splice(index, 1);
 
     // pokemonList
