@@ -12,7 +12,6 @@ function sortPokemonBy(pokeList, sortBy, order = 0) {
 }
 
 function App() {
-  const newPokeList = GetDataGrahp();
   const [pokemonList, setpokemonList] = useState(
     JSON.parse(localStorage.getItem('pokelist')) || ''
   );
@@ -22,20 +21,27 @@ function App() {
   const [filters, setfilters] = useState({
     gen: [],
   });
+  var newPokeList;
+  if (!pokemonList) {
+  }
 
-  // if (newPokeList) {
-  // }
-  useEffect(() => {
+
+  useEffect(async () => {
     if (!pokemonList) {
+      newPokeList = await GetDataGrahp();
+      localStorage.setItem('pokelist', JSON.stringify(newPokeList));
       setpokemonList(newPokeList);
-      localStorage.setItem('pokelist', newPokeList);
     }
-  }, [newPokeList]);
+  }, []);
+  useEffect(() => {
+    runFilter()
+  }, [pokemonList]);
 
   function sortPokemon(by, newOrder) {
     var order = newOrder;
     if (!newOrder) order = sorting.order;
     if (by == sorting.cat) order = sorting.order ? 0 : 1;
+    console.log(by);
     var pokemonListSorted = sortPokemonBy(filteredList, by, order);
     if (filteredList != pokemonListSorted) setFilteredList(pokemonListSorted);
     setSorting({ order: order, cat: by });
@@ -58,10 +64,9 @@ function App() {
     var pl = pokemonList;
     var gens = [1, 2, 3, 4, 5, 6, 7, 8];
     var plarr = [
-      // '-gmax',
-      // '-primal',
-      // 'rockruff-own-tempo',
-      // '-mega',
+      '-gmax',
+      '-primal',
+      '-mega',
     ];
 
     for (const filterName of plarr) {
@@ -98,14 +103,15 @@ function App() {
           <button onClick={() => sortPokemon('id')}>ID</button>
           <button onClick={() => sortPokemon('order')}>Family</button>
           <button onClick={() => sortPokemon('gen')}>Gen</button>
+          <button onClick={() => sortPokemon('name')}>Name</button>
         </div>
         <div>
           {sorting.order} - {sorting.cat} - {updateList}
         </div>
       </div>
       <div className='PokemonList'>
-        {pokemonList &&
-          pokemonList.map((pokemon, index) => (
+        {filteredList &&
+          filteredList.map((pokemon, index) => (
             // <div>{pokemon.name}</div>
             <PokemonCard
               pokemon={pokemon}

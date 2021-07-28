@@ -35,17 +35,17 @@ const getPokemonQuery = gql`
   }
 `;
 
-function GetDataGrahp() {
-  const [pokemonList, setpokemonList] = useState(null);
-  console.log(pokemonList, 'EXPORT2');
-  useEffect(() => {
-    client
+async function GetDataGrahp() {
+  var pokeList = new Array();
+  // const [pokemonList, setpokemonList] = useState(null);
+  // console.log(pokeList, 'EXPORT2');
+  // useEffect(() => {
+   await client
       .query({
         query: getPokemonQuery,
       })
       .then((result) => {
         var pokemons = result.data.pokemon_v2_pokemon;
-        var pokeList = new Array();
         for (const pokemon of pokemons) {
           var pok = new Object();
           pok.cp = GetPokemonCP(pokemon.pokemon_v2_pokemonstats);
@@ -86,7 +86,7 @@ function GetDataGrahp() {
             10234, 10235, 10236, 10237, 10238, 10239, 10240, 10241, 10242,
             10243, 10244, 10245, 10246, 10247, 10248, 10153, 10128, 10151,
             10118, 10027, 10028, 10029, 10030, 10031, 10032, 10129, 10154,
-            10150, 10146, 10093, 10149,
+            10150, 10146, 10093, 10149,10220,10178
           ];
           var rawList = [
             10093, 10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095,
@@ -141,11 +141,11 @@ function GetDataGrahp() {
             if (!excludeList.includes(pok.id)) pokeList.push(pok);
           }
         }
-        setpokemonList(pokeList);
+        // setpokemonList(pokeList);
       });
-  }, []);
-
-  return pokemonList;
+  // }, []);
+  // console.log(pokeList, 'tam ta ram');
+  return pokeList;
 }
 
 export default GetDataGrahp;
