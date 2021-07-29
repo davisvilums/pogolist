@@ -3,14 +3,20 @@ import { useState, useEffect, useMemo } from 'react';
 
 import PokeTable from './components/PokeTable';
 import SortingFields from './components/SortingFields';
+import HeaderFilters from './components/HeaderFilters';
 import GetDataGrahp from './components/GetDataGrahp';
+
+const filtersList = {baby:true,legendary:true,mythical:true,mega:true,gmax:true,released:true,unreleased:true};
 
 function App() {
   const [pokemonData, setPokemonData] = useState(
     JSON.parse(localStorage.getItem('pokelist')) || ''
   );
-  const [q, setQ] = useState('');
+  const [query, setQuery] = useState('');
   const [sorting, setSorting] = useState({ field: '', order: '' });
+
+  const [filters, setFilters] = useState(filtersList);
+  const [collection, setCollection] = useState([]);
 
   useEffect(async () => {
     if (!pokemonData) {
@@ -32,12 +38,27 @@ function App() {
 
       // ADD FILTERS HERE
     }
-    return pokemonList;
-  }, [pokemonData, sorting]);
+    pokemonList = pokemonList.filter((row) => row.name.toLowerCase().indexOf(query) > -1);
 
-  function search(rows) {
-    return rows.filter((row) => row.name.toLowerCase().indexOf(q) > -1);
-  }
+    if(filters){
+      if(!filters['mega']) pokemonList = pokemonList.filter((row) => !row.tags.includes('mega'));
+      if(!filters['gmax']) pokemonList = pokemonList.filter((row) => !row.tags.includes('gmax'));
+      if(!filters['legendary']) pokemonList = pokemonList.filter((row) => !row.tags.includes('legendary'));
+      if(!filters['mythical']) pokemonList = pokemonList.filter((row) => !row.tags.includes('mythical'));
+      if(!filters['baby']) pokemonList = pokemonList.filter((row) => !row.tags.includes('baby'));
+      if(!filters['unreleased']) pokemonList = pokemonList.filter((row) => row.released);
+      if(!filters['released']) pokemonList = pokemonList.filter((row) => !row.released);
+    }
+
+    return pokemonList;
+  }, [pokemonData, sorting,query,filters]);
+
+  const handleOnChange = (e) => {
+    const value = e.target.value;
+    const nf = Object.assign({}, filters);
+    nf[value] = !filters[value];
+    setFilters(nf);
+  };
 
   return (
     <div className='App'>
@@ -51,7 +72,10 @@ function App() {
           />
         </div>
         <div>
-          <input type='text' value={q} onChange={(e) => setQ(e.target.value)} />
+          <HeaderFilters filters={filters} change={(e)=>handleOnChange(e)}/>
+        </div>
+        <div>
+          <input type="text" value={query} onChange={(e)=>setQuery(e.target.value)}/>
         </div>
         <div>
           {sorting.field} - {sorting.order}

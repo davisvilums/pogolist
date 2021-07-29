@@ -25,7 +25,7 @@ function PokemonCard(props) {
       </div>
       <div className='pokemonCP'>{pokemon.cp}</div>
       <div className='pokemonData'>
-        {/* <div>{pokemon.newsprite}</div> */}
+        <div>{pokemon.tags.join()}</div>
 
         {/* {pokemon.released && <div>RELEASED</div>} */}
         {/* {pokemon.name.length > 15 && <div>{pokemon.name.length}</div>} */}

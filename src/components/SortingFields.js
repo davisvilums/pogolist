@@ -20,7 +20,7 @@ export default function SortingFields({ data, onSorting }) {
             {heading}
             {sortingField &&
               sortingField === heading &&
-              (sortingOrder === 'asc' ? '<' : '>')}
+              (sortingOrder === 'asc' ? '>' : '<')}
           </strong>
         ))}
     </div>

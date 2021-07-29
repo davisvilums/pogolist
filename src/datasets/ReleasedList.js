@@ -51,6 +51,4 @@ export const ReleasedList = [
   10174, 10176, 10033, 10034, 10035, 10036, 10090, 10073, 10071, 10038, 10041,
   10045, 10048, 10055, 10067, 10088, 10060, 10177,
 ];
-// export default {
-//   ReleasedList,
-// };
+export default ReleasedList;
