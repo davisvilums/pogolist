@@ -1,9 +1,10 @@
 function PokemonCard(props) {
   var pokemon = props.pokemon;
   var removePokemon = props.removePokemon;
+  var select = props.select;
 
   return (
-    <div className='pokemonItem'>
+    <div className='pokemonItem' onClick={()=>select(pokemon.id)}>
       <div className='pokemonID'>#{pokemon.id}</div>
       <div
         className='pokemonGeneration'
@@ -30,7 +31,7 @@ function PokemonCard(props) {
         {/* {pokemon.released && <div>RELEASED</div>} */}
         {/* {pokemon.name.length > 15 && <div>{pokemon.name.length}</div>} */}
         {/* <div>kind: {pokemon.kind}</div> */}
-        {/* <div>order: {pokemon.order}</div> */}
+        <div>selected: {pokemon.selected}</div>
       </div>
     </div>
   );
