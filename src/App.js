@@ -6,7 +6,16 @@ import SortingFields from './components/SortingFields';
 import HeaderFilters from './components/HeaderFilters';
 import GetDataGrahp from './components/GetDataGrahp';
 
-const filtersList = {selected:true,baby:true,legendary:false,mythical:false,mega:false,gmax:false,released:true,unreleased:false};
+const filtersList = {
+  selected: true,
+  baby: true,
+  legendary: false,
+  mythical: false,
+  mega: false,
+  gmax: false,
+  released: true,
+  unreleased: false,
+};
 
 function App() {
   const [pokemonData, setPokemonData] = useState(
@@ -14,9 +23,12 @@ function App() {
   );
   const [query, setQuery] = useState('');
   const [sorting, setSorting] = useState({ field: 'cp', order: 'asc' });
+  // const [sorting, setSorting] = useState({ field: '', order: '' });
 
   const [filters, setFilters] = useState(filtersList);
-  const [collection, setCollection] = useState([]);
+  const [collection, setCollection] = useState(
+    JSON.parse(localStorage.getItem('collection')) || []
+  );
 
   const [re, setRe] = useState(1);
 
@@ -29,43 +41,47 @@ function App() {
   }, []);
 
   const pokemonComp = useMemo(() => {
-    let pokemonList = pokemonData;
+    if (!pokemonData) return '';
+    let pl = pokemonData;
+
     if (sorting.field) {
       console.log(sorting);
       const reversed = sorting.order === 'asc' ? 1 : -1;
-      pokemonList.sort((a, b) => {
+      pl.sort((a, b) => {
         var sort = a[sorting.field] > b[sorting.field] ? -1 : 1;
         return reversed * sort;
       });
 
       // ADD FILTERS HERE
     }
-    pokemonList = pokemonList.filter((row) => row.name.toLowerCase().indexOf(query) > -1);
+    pl = pl.filter((p) => p.name.toLowerCase().indexOf(query) > -1);
 
-    pokemonList = pokemonList.map((item) => {
-      item.selected = (collection.indexOf(item.id) > -1) ? 1 : 0;
+    pl = pl.map((item) => {
+      item.selected = collection.indexOf(item.id) > -1 ? 1 : 0;
       return item;
     });
-    // pokemonList = pokemonList.filter((row) => !row.selected);
+    // pl = pl.filter((p) => !p.selected);
     // console.log(collection, ' 0');
 
-    if(filters){
-      if(!filters['mega']) pokemonList = pokemonList.filter((row) => !row.tags.includes('mega'));
-      if(!filters['gmax']) pokemonList = pokemonList.filter((row) => !row.tags.includes('gmax'));
-      if(!filters['legendary']) pokemonList = pokemonList.filter((row) => !row.tags.includes('legendary'));
-      if(!filters['mythical']) pokemonList = pokemonList.filter((row) => !row.tags.includes('mythical'));
-      if(!filters['baby']) pokemonList = pokemonList.filter((row) => !row.tags.includes('baby'));
-      if(!filters['unreleased']) pokemonList = pokemonList.filter((row) => row.released);
-      if(!filters['released']) pokemonList = pokemonList.filter((row) => !row.released);
-      if(!filters['selected']) pokemonList = pokemonList.filter((row) => row.selected == 0);
+    if (filters) {
+      if (!filters['mega']) pl = pl.filter((p) => !p.tags.includes('mega'));
+      if (!filters['gmax']) pl = pl.filter((p) => !p.tags.includes('gmax'));
+      if (!filters['legendary'])
+        pl = pl.filter((p) => !p.tags.includes('legendary'));
+      if (!filters['mythical'])
+        pl = pl.filter((p) => !p.tags.includes('mythical'));
+      if (!filters['baby']) pl = pl.filter((p) => !p.tags.includes('baby'));
+      if (!filters['unreleased']) pl = pl.filter((p) => p.released);
+      if (!filters['released']) pl = pl.filter((p) => !p.released);
+      if (!filters['selected']) pl = pl.filter((p) => p.selected == 0);
     }
 
-    return pokemonList;
-  }, [pokemonData, sorting,query,filters,collection,re]);
+    return pl;
+  }, [pokemonData, sorting, query, filters, collection, re]);
 
-  useEffect(()=>{
-    console.log(collection,'999')
-  },[re])
+  useEffect(() => {
+    console.log(collection, '999');
+  }, [re]);
 
   const handleOnChange = (e) => {
     const value = e.target.value;
@@ -78,11 +94,12 @@ function App() {
   function addToCollection(id) {
     var nc = collection;
     var index = collection.indexOf(id);
-    if(index !== -1) nc.splice(index, 1);
+    if (index !== -1) nc.splice(index, 1);
     else nc.push(id);
     setCollection(nc);
     console.log(nc);
     setRe(re * -1);
+    localStorage.setItem('collection', JSON.stringify(nc));
   }
 
   return (
@@ -97,10 +114,14 @@ function App() {
           />
         </div>
         <div>
-          <HeaderFilters filters={filters} change={(e)=>handleOnChange(e)}/>
+          <HeaderFilters filters={filters} change={(e) => handleOnChange(e)} />
         </div>
         <div>
-          <input type="text" value={query} onChange={(e)=>setQuery(e.target.value)}/>
+          <input
+            type='text'
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
         </div>
         <div>
           {sorting.field} - {sorting.order}
