@@ -30,7 +30,20 @@ function App() {
     JSON.parse(localStorage.getItem('collection')) || []
   );
 
+  const [collections, setCollections] = useState([]);
+
   const [re, setRe] = useState(1);
+
+  const addCollection = (col) => {
+    var collectionList = collections;
+    var newCol = {
+      name: col.name,
+      data: [],
+    };
+
+    collectionList.push(newCol);
+    setCollections(collectionList);
+  };
 
   useEffect(async () => {
     if (!pokemonData) {
@@ -45,7 +58,6 @@ function App() {
     let pl = pokemonData;
 
     if (sorting.field) {
-      console.log(sorting);
       const reversed = sorting.order === 'asc' ? 1 : -1;
       pl.sort((a, b) => {
         var sort = a[sorting.field] > b[sorting.field] ? -1 : 1;
@@ -80,7 +92,7 @@ function App() {
   }, [pokemonData, sorting, query, filters, collection, re]);
 
   useEffect(() => {
-    console.log(collection, '999');
+    // console.log(collection, '999');
   }, [re]);
 
   const handleOnChange = (e) => {
