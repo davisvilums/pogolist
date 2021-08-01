@@ -193,10 +193,10 @@ function App() {
         <div>
           {collections.map((col, index) => (
             <div>
-                <span style={{ textDecoration: col.hide ? "line-through" : "" }}>{col.text}</span>
+                <input type="radio" checked={col.selected} onClick={() => selectCollection(index)}/>
+                <span style={{ textDecoration: col.hide ? "line-through" : "" }} onClick={() => selectCollection(index)}>{col.text}</span>
                 <input type="checkbox" checked={col.hide} onClick={() => markCollection(index, 'hide')}/>hide{' '}
                 <input type="checkbox" checked={col.filter} onClick={() => markCollection(index, 'filter')}/>filter{' '}
-                <input type="checkbox" checked={col.selected} onClick={() => selectCollection(index)}/>selected{' '}
                 <button variant="outline-danger" onClick={() => removeCollection(index)}>✕</button>
             </div>
           ))}
