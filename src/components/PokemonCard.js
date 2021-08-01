@@ -9,7 +9,7 @@ function PokemonCard(props) {
       <div className='pokemonID'>#{pokemon.id}</div>
       <div
         className='pokemonGeneration'
-        onClick={() => removePokemon(pokemon.id)}
+        // onClick={() => removePokemon(pokemon.id)}
       >
         G{pokemon.gen}
       </div>

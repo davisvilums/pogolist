@@ -33,26 +33,7 @@ function App() {
   const [collections, setCollections] = useState(
     JSON.parse(localStorage.getItem('collection')) || []);
   
-  // ([
-  //   {
-  //     text: "IV100",
-  //     pokemon: [],
-  //     selected: false,
-  //     hide: false,
-  //     filter: false,
-  //   }
-  // ]);
   const [value, setValue] = useState("");
-
-  const addCollection = text => {
-    var newCol = {
-      text: text,
-      pokemon: [],
-    }
-    const newCollection = [...collections, newCol];
-    setCollections(newCollection);
-  };
-
   
   const selectCollection = (index) => {
     var newCollection = [...collections];
@@ -81,7 +62,19 @@ function App() {
     setRe(re * -1);
   };
 
+
   const [re, setRe] = useState(1);
+
+  const addCollection = (col) => {
+    var collectionList = collections;
+    var newCol = {
+      name: col.name,
+      data: [],
+    };
+
+    collectionList.push(newCol);
+    setCollections(collectionList);
+  };
 
   useEffect(async () => {
     if (!pokemonData) {
