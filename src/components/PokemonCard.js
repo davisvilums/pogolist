@@ -4,29 +4,32 @@ function PokemonCard(props) {
   var select = props.select;
 
   return (
-    <div className={`pokemonItem ${pokemon.selected ? "selected" : ""}`} onClick={() => select(pokemon.id)}>
+    <div
+      className={`pokemonItem ${pokemon.selected ? "selected" : ""}`}
+      onClick={() => select(pokemon.id)}
+    >
       {pokemon.selected}
-      <div className='pokemonID'>#{pokemon.id}</div>
+      <div className="pokemonID">#{pokemon.id}</div>
       <div
-        className='pokemonGeneration'
+        className="pokemonGeneration"
         // onClick={() => removePokemon(pokemon.id)}
       >
         G{pokemon.gen}
       </div>
-      <div className='pokemonSpriteWrap'>
-        <img src={pokemon.sprite} alt='' className='pokemonSprite' />
+      <div className="pokemonSpriteWrap">
+        <img src={pokemon.sprite} alt="" className="pokemonSprite" />
       </div>
       <div
         className={`banner ${
           pokemon.name.length > 12
-            ? 'pokemonName pokemonNameSmall'
-            : 'pokemonName'
+            ? "pokemonName pokemonNameSmall"
+            : "pokemonName"
         }`}
       >
-        {pokemon.name.split('-').join(' ')}
+        {pokemon.name.split("-").join(" ")}
       </div>
-      <div className='pokemonCP'>{pokemon.cp}</div>
-      <div className='pokemonData'>
+      <div className="pokemonCP">{pokemon.cp}</div>
+      <div className="pokemonData">
         <div>{pokemon.tags.join()}</div>
 
         {/* {pokemon.released && <div>RELEASED</div>} */}

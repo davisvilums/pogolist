@@ -1,10 +1,12 @@
-import PokemonCard from './PokemonCard';
+import PokemonCard from "./PokemonCard";
 
 export default function PokeTable({ data, select }) {
   return (
-    <div className='PokemonList'>
+    <div className="PokemonList">
       {data[0] &&
-        data.map((row) => <PokemonCard pokemon={row} key={row.name} select={select} />)}
+        data.map((row) => (
+          <PokemonCard pokemon={row} key={row.name} select={select} />
+        ))}
     </div>
   );
 }
