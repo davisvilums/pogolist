@@ -65,15 +65,18 @@ function App() {
   const [re, setRe] = useState(1);
 
   const addCollection = (col) => {
-    var collectionList = collections;
     var newCol = {
-      name: col.name,
-      data: [],
+      text: col,
+      pokemon: [],
     };
+    console.log(newCol);
 
-    collectionList.push(newCol);
-    setCollections(collectionList);
+    setCollections([...collections, newCol]);
   };
+
+  useEffect(() => {
+    localStorage.setItem("collection", JSON.stringify(collections));
+  }, [collections]);
 
   useEffect(async () => {
     if (!pokemonData) {
@@ -120,10 +123,8 @@ function App() {
     if (filters) {
       if (!filters["mega"]) pl = pl.filter((p) => !p.tags.includes("mega"));
       if (!filters["gmax"]) pl = pl.filter((p) => !p.tags.includes("gmax"));
-      if (!filters["legendary"])
-        pl = pl.filter((p) => !p.tags.includes("legendary"));
-      if (!filters["mythical"])
-        pl = pl.filter((p) => !p.tags.includes("mythical"));
+      if (!filters["legendary"]) pl = pl.filter((p) => !p.tags.includes("legendary"));
+      if (!filters["mythical"]) pl = pl.filter((p) => !p.tags.includes("mythical"));
       if (!filters["baby"]) pl = pl.filter((p) => !p.tags.includes("baby"));
       if (!filters["unreleased"]) pl = pl.filter((p) => p.released);
       if (!filters["released"]) pl = pl.filter((p) => !p.released);
@@ -173,8 +174,8 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <div className="TitleSection">
+    <div className='App'>
+      <div className='TitleSection'>
         <h1>Pokemon</h1>
 
         <form onSubmit={handleSubmit}>
@@ -183,25 +184,21 @@ function App() {
               <b>Add Collection</b>
             </label>
             <input
-              type="text"
-              className="input"
+              type='text'
+              className='input'
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Add new collection"
+              placeholder='Add new collection'
             />
           </div>
-          <button variant="primary mb-3" type="submit">
+          <button variant='primary mb-3' type='submit'>
             Submit
           </button>
         </form>
         <div>
           {collections.map((col, index) => (
             <div>
-              <input
-                type="radio"
-                checked={col.selected}
-                onClick={() => selectCollection(index)}
-              />
+              <input type='radio' checked={col.selected} onClick={() => selectCollection(index)} />
               <span
                 style={{ textDecoration: col.hide ? "line-through" : "" }}
                 onClick={() => selectCollection(index)}
@@ -209,21 +206,18 @@ function App() {
                 {col.text}
               </span>
               <input
-                type="checkbox"
+                type='checkbox'
                 checked={col.hide}
                 onClick={() => markCollection(index, "hide")}
               />
               hide{" "}
               <input
-                type="checkbox"
+                type='checkbox'
                 checked={col.filter}
                 onClick={() => markCollection(index, "filter")}
               />
               filter{" "}
-              <button
-                variant="outline-danger"
-                onClick={() => removeCollection(index)}
-              >
+              <button variant='outline-danger' onClick={() => removeCollection(index)}>
                 ✕
               </button>
             </div>
@@ -240,11 +234,7 @@ function App() {
           />
         </div>
         <div>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+          <input type='text' value={query} onChange={(e) => setQuery(e.target.value)} />
         </div>
         <div>
           {sorting.field} - {sorting.order}

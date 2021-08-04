@@ -78,16 +78,18 @@ body h1 {
   max-width: 100%;
   /* overflow: hidden; */
   padding: 0 0 3px;
+  background: #eee;
 }
 .pokemonNameSmall {
   font-size: 12px;
   line-height: 1;
 }
 .pokemonCP {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: bold;
   text-align: center;
   line-height: 1em;
+  background: #eee;
 }
 .pokemonData {
   text-align: center;
