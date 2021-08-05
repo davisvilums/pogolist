@@ -1,3 +1,6 @@
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 export default function HeaderFilters({ filters, change }) {
   const check = filters;
 
@@ -5,15 +8,19 @@ export default function HeaderFilters({ filters, change }) {
     <div className="PokemonFilters">
       {filters &&
         Object.keys(check).map((f) => (
-          <label key={f}>
-            <input
-              type="checkbox"
-              value={f}
-              checked={check[f]}
-              onChange={(e) => change(e)}
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value={f}
+                  checked={check[f]}
+                  onChange={(e) => change(e)}
+                  color="primary"
+                />
+              }
+              label={f}
             />
-            {f}
-          </label>
+          </div>
         ))}
     </div>
   );
