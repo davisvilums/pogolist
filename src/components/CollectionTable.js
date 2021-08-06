@@ -3,12 +3,13 @@ import React from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import DragHandleIcon from "@material-ui/icons/DragHandle";
+import { Container, Draggable } from "react-smooth-dnd";
+import arrayMove from "array-move";
+
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Typography from "@material-ui/core/Typography";
 
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -57,65 +58,55 @@ function CollectionTable({ collections, updateCollection }) {
     updateCollection(newCollection);
   };
 
+  const onDrop = ({ removedIndex, addedIndex }) => {
+    updateCollection((newCollection) => arrayMove(newCollection, removedIndex, addedIndex));
+  };
+
   return (
     <div>
-      <TableContainer>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Collection</TableCell>
-              <TableCell align="center">Hide</TableCell>
-              <TableCell align="center">Filter</TableCell>
-              <TableCell align="right"></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {collections.map((col, index) => (
-              <TableRow key={col.text} className={col.selected && "activeRow"}>
-                <TableCell
+      <div className="listHead">
+        <div>Collection</div>
+        <div align="center">Hide</div>
+        <div align="center">Filter</div>
+      </div>
+      <List>
+        <Container onDrop={onDrop}>
+          {collections.map((col, index) => (
+            <Draggable key={col.text}>
+              <ListItem className={`TableRow ${col.selected && "activeRow"}`}>
+                <DragHandleIcon className="drag" />
+
+                <Typography
                   className="rowHead"
-                  component="th"
+                  // component="th"
                   scope="row"
                   onClick={() => selectCollection(index)}
                 >
                   {col.text}
-                </TableCell>
-                <TableCell align="right">
-                  <Checkbox
-                    checked={col.hide}
-                    onChange={() => markCollection(index, "hide")}
-                    name="checkedB"
-                  />
-                </TableCell>
-                <TableCell align="right">
-                  <Checkbox
-                    checked={col.filter}
-                    onChange={() => markCollection(index, "filter")}
-                    name="checkedB"
-                    color="primary"
-                  />
-                </TableCell>
-                <TableCell align="right">
-                  <HighlightOffIcon
-                    // onClick={() => removeCollection(index)}
-                    onClick={() => handleClickOpen(index)}
-                    className="DeleteIcon"
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Do you really want to delete this collection?"}
-        </DialogTitle>
+                </Typography>
+                <Checkbox
+                  checked={col.hide}
+                  onChange={() => markCollection(index, "hide")}
+                  name="checkedB"
+                />
+                <Checkbox
+                  checked={col.filter}
+                  onChange={() => markCollection(index, "filter")}
+                  name="checkedB"
+                  color="primary"
+                />
+                <HighlightOffIcon
+                  // onClick={() => removeCollection(index)}
+                  onClick={() => handleClickOpen(index)}
+                  className="DeleteIcon"
+                />
+              </ListItem>
+            </Draggable>
+          ))}
+        </Container>
+      </List>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{"Do you really want to delete this collection?"}</DialogTitle>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             No

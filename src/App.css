@@ -47,11 +47,32 @@ body h1 {
 .sortingArrow {
   width: 20px;
 }
+.listHead {
+  display: flex;
+  font-size: 16px;
+  padding: 0 25px 0 23px;
+}
+.listHead div {
+  padding: 0 5px;
+  text-align: left;
+}
+.listHead div:first-child {
+  flex-grow: 1;
+}
+li.TableRow {
+  display: flex;
+  padding: 0 5px;
+}
+.TableRow .drag {
+  cursor: grab;
+}
 .activeRow {
   background: #c7dbec;
 }
 .rowHead {
   cursor: pointer;
+  width: auto;
+  flex-grow: 1;
 }
 .TitleSection .MuiTableCell-root {
   border-bottom: 1px solid rgb(224 224 224 / 50%);
@@ -108,6 +129,7 @@ body h1 {
   flex-direction: column;
   position: relative;
   margin: 0 -1px -1px 0;
+  cursor: pointer;
 }
 .pokemonItem.selected {
   background: #c7dbec;
@@ -186,4 +208,13 @@ td {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.DataImportExport {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid rgb(224 224 224 / 50%);
+}
+.DataImportExport > div {
+  margin: 10px 0;
 }

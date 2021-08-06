@@ -4,8 +4,15 @@ import PokeTable from "./components/PokeTable";
 import HeaderFilters from "./components/TagFilters";
 import GetDataGrahp from "./components/GetDataGrahp";
 import CollectionControl from "./components/CollectionControl";
+import DataImportExport from "./components/DataImportExport";
+
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 function Pokedex({ sorting, query }) {
+  const [open, setOpen] = useState(false);
   const [filters, setFilters] = useState([]);
   const [pokemonData, setPokemonData] = useState(
     JSON.parse(localStorage.getItem("pokelist")) || ""
@@ -13,6 +20,10 @@ function Pokedex({ sorting, query }) {
   const [collections, setCollections] = useState(
     JSON.parse(localStorage.getItem("collection")) || []
   );
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(async () => {
     if (!pokemonData) {
@@ -89,7 +100,10 @@ function Pokedex({ sorting, query }) {
   function addToCollection(id) {
     const newCollection = [...collections];
     var currentCollection = getCurrentCollection(newCollection);
-    if (!currentCollection) return;
+    if (!currentCollection) {
+      setOpen(true);
+      return;
+    }
     currentCollection = currentCollection.pokemon;
     var index = currentCollection.indexOf(id);
 
@@ -104,8 +118,17 @@ function Pokedex({ sorting, query }) {
       <div className="TitleSection">
         <CollectionControl collections={collections} updateCollection={setCollections} />
         <HeaderFilters filters={filters} setFilters={setFilters} />
+        <DataImportExport updateCollection={setCollections} />
       </div>
       <PokeTable data={pokemonComp} select={addToCollection} />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{"Please select or create a collection before."}</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
