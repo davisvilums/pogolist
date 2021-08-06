@@ -12,6 +12,14 @@ body h1 {
   min-height: 100vh;
   display: flex;
 }
+@media only screen and (max-width: 800px) {
+  .App::before {
+    content: "Tikai datorā :p";
+  }
+  .App div {
+    display: none;
+  }
+}
 .PokedexArea {
   display: flex;
   width: 100%;
@@ -90,6 +98,7 @@ body h1 {
   align-content: flex-start;
   padding-left: 260px;
   padding-top: 5px;
+  width: 100%;
 }
 .pokemonItem {
   border: 1px solid #ddd;

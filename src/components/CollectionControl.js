@@ -36,7 +36,8 @@ export default function CollectionControl({ collections, updateCollection }) {
           size="small"
         />
         <Button
-          variant="contained"
+          // variant="contained"
+          variant="outlined"
           color="primary"
           type="submit"
           size="small"

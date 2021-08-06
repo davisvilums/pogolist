@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from "@material-ui/icons/Done";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const filtersList = {
   released: true,
   unreleased: false,
+  normal: true,
   legendary: false,
   mythical: false,
   mega: false,
@@ -20,7 +22,7 @@ const filtersList = {
   g8: true,
 };
 
-export default function HeaderFilters({ filters, setFilters }) {
+export default function TagFilters({ filters, setFilters }) {
   useEffect(() => {
     setFilters(filtersList);
   }, []);
@@ -33,18 +35,20 @@ export default function HeaderFilters({ filters, setFilters }) {
   };
 
   return (
-    <div className="PokemonFilters">
-      {filters &&
-        Object.keys(filters).map((f) => (
-          <Chip
-            label={f}
-            clickable
-            color="primary"
-            deleteIcon={<DoneIcon />}
-            color={filters[f] ? "primary" : ""}
-            onClick={() => handleOnChange(f)}
-          />
-        ))}
-    </div>
+    <Tooltip title="Filter by criteria" placement="right" arrow>
+      <div className="PokemonFilters">
+        {filters &&
+          Object.keys(filters).map((f) => (
+            <Chip
+              label={f}
+              clickable
+              color="primary"
+              deleteIcon={<DoneIcon />}
+              color={filters[f] ? "primary" : ""}
+              onClick={() => handleOnChange(f)}
+            />
+          ))}
+      </div>
+    </Tooltip>
   );
 }
