@@ -4,15 +4,18 @@ import PokeTable from "./components/PokeTable";
 import HeaderFilters from "./components/HeaderFilters";
 import GetDataGrahp from "./components/GetDataGrahp";
 import CollectionControl from "./components/CollectionControl";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
 
 const filtersList = {
-  baby: true,
+  released: true,
+  unreleased: false,
   legendary: false,
   mythical: false,
   mega: false,
+  baby: true,
   gmax: false,
-  released: true,
-  unreleased: false,
 };
 
 function Pokedex({ sorting, query }) {
@@ -102,8 +105,8 @@ function Pokedex({ sorting, query }) {
     return pl;
   }, [pokemonData, sorting, query, filters, collection, re]);
 
-  const handleOnChange = (e) => {
-    const value = e.target.value;
+  const handleOnChange = (value) => {
+    // const value = e.target.value;
     const nf = Object.assign({}, filters);
     nf[value] = !filters[value];
     setFilters(nf);
@@ -141,29 +144,28 @@ function Pokedex({ sorting, query }) {
   }
 
   return (
-    <div className="App">
+    <div className="PokedexArea">
       <div className="TitleSection">
         <CollectionControl collections={collections} updateCollection={updateCollection} />
-        <form onSubmit={handleSubmit}>
-          <div>
-            <input
-              type="text"
-              className="input"
-              value={addCollectionValue}
-              onChange={(e) => setAddCollectionValue(e.target.value)}
-              placeholder="Add new collection"
-            />
-          </div>
-          <button variant="primary mb-3" type="submit">
-            Submit
-          </button>
+        <form onSubmit={handleSubmit} className="CollectionForm">
+          <TextField
+            id="standard-basic"
+            label="Add new collection"
+            onChange={(e) => setAddCollectionValue(e.target.value)}
+            value={addCollectionValue}
+            size="small"
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            size="small"
+            className="AddCollectionButton"
+          >
+            <AddIcon />
+          </Button>
         </form>
-        <div>
-          <HeaderFilters filters={filters} change={(e) => handleOnChange(e)} />
-        </div>
-        {/* <div>
-          <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
-        </div> */}
+        <HeaderFilters filters={filters} change={(e) => handleOnChange(e)} />
       </div>
       <PokeTable data={pokemonComp} select={addToCollection} re={re} />
     </div>

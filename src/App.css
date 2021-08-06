@@ -5,12 +5,12 @@ body h1 {
   margin: 5px 0;
 }
 .App {
-  display: flex;
   font-family: Arial, Helvetica, sans-serif;
   justify-content: center;
   font-size: 25px;
-  margin-top: 32px;
-  width: 100%;
+  padding-top: 64px;
+  min-height: 100vh;
+  display: flex;
 }
 .TitleSection {
   background-color: #5dbaff;
@@ -21,11 +21,56 @@ body h1 {
   color: #fff;
   position: relative;
 }
-.PokemonSort {
-  margin: 0 auto;
+.PokedexArea {
+  display: flex;
+  width: 100%;
 }
-.PokemonSort strong {
-  margin: 0 5px;
+.PokemonSort {
+  margin: 0 20px 0 auto;
+}
+.PokemonSort button {
+  line-height: 1em;
+  padding-left: 25px;
+}
+.sortingArrow {
+  width: 20px;
+}
+.activeRow {
+  background: #c7dbec;
+}
+.rowHead {
+  cursor: pointer;
+}
+.TitleSection th.MuiTableCell-sizeSmall {
+  padding: 2px;
+}
+.TitleSection th.MuiTableCell-sizeSmall:first-child {
+  padding-left: 10px;
+}
+.TitleSection td.MuiTableCell-sizeSmall {
+  padding: 2px;
+  text-align: center;
+}
+.MuiTableCell-sizeSmall .MuiCheckbox-root {
+  padding: 0;
+}
+.DeleteIcon {
+  cursor: pointer;
+}
+.PokemonFilters > div {
+  margin: 0 0.2em;
+}
+.CollectionForm {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  margin: 5px 0 20px;
+}
+.CollectionForm button {
+  min-width: 40px;
+}
+.PokeTableLoading {
+  margin-top: 20%;
 }
 .PokeTable {
   width: 70%;
@@ -75,21 +120,32 @@ body h1 {
   max-width: 100%;
   max-height: 100px;
 }
+.PokemonMeta {
+  background: #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .pokemonName {
   font-size: 15px;
   text-align: center;
   text-transform: capitalize;
   font-weight: bold;
-  /* white-space: nowrap; */
-  /* text-overflow: ellipsis; */
   max-width: 100%;
-  /* overflow: hidden; */
-  padding: 0 0 3px;
-  background: #eee;
+  line-height: 0.9em;
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.pokemonNameSmall {
-  font-size: 12px;
-  line-height: 1;
+.pokemonName10 {
+  font-size: 14px;
+}
+.pokemonName12 {
+  font-size: 13px;
+}
+.pokemonName15 {
+  font-size: 13px;
 }
 .pokemonCP {
   font-size: 14px;

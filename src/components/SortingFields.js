@@ -1,33 +1,45 @@
 import { useState } from "react";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 export default function SortingFields({ sorting, onSorting }) {
-  const [sortingField, setSortingField] = useState(sorting.field);
-  const [sortingOrder, setSetsortingOrder] = useState(sorting.order);
+  const [sf, setSortingField] = useState(sorting.field);
+  const [so, setSetsortingOrder] = useState(sorting.order);
 
   const onSortingChange = (field) => {
-    var order = field === sortingField && sortingOrder === "asc" ? "desc" : "asc";
+    var order = field === sf && so === "asc" ? "desc" : "asc";
     setSortingField(field);
     setSetsortingOrder(order);
     onSorting(field, order);
   };
   return (
-    <div className="PokemonSort">
-      <strong onClick={() => onSortingChange("cp")} key={"cp"}>
-        {"CP"}
-        {sortingField && sortingField === "cp" && (sortingOrder === "asc" ? ">" : "<")}
-      </strong>
-      <strong onClick={() => onSortingChange("name")} key={"name"}>
-        {"Name"}
-        {sortingField && sortingField === "name" && (sortingOrder === "asc" ? ">" : "<")}
-      </strong>
-      <strong onClick={() => onSortingChange("order")} key={"order"}>
-        {"Order"}
-        {sortingField && sortingField === "order" && (sortingOrder === "asc" ? ">" : "<")}
-      </strong>
-      <strong onClick={() => onSortingChange("id")} key={"id"}>
-        {"ID"}
-        {sortingField && sortingField === "id" && (sortingOrder === "asc" ? ">" : "<")}
-      </strong>
-    </div>
+    <ButtonGroup aria-label="small outlined button group" className="PokemonSort">
+      <Button onClick={() => onSortingChange("cp")}>
+        CP{" "}
+        <span className="sortingArrow">
+          {sf && sf === "cp" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
+        </span>
+      </Button>
+      <Button onClick={() => onSortingChange("name")}>
+        Name{" "}
+        <span className="sortingArrow">
+          {sf && sf === "name" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
+        </span>
+      </Button>
+      <Button onClick={() => onSortingChange("order")}>
+        Order{" "}
+        <span className="sortingArrow">
+          {sf && sf === "order" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
+        </span>
+      </Button>
+      <Button onClick={() => onSortingChange("id")}>
+        ID{" "}
+        <span className="sortingArrow">
+          {sf && sf === "id" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
+        </span>
+      </Button>
+    </ButtonGroup>
   );
 }

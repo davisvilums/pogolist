@@ -15,7 +15,6 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import Pokedex from "./Pokedex";
 
-const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
