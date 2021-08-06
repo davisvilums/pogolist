@@ -4,48 +4,15 @@ import PokeTable from "./components/PokeTable";
 import HeaderFilters from "./components/HeaderFilters";
 import GetDataGrahp from "./components/GetDataGrahp";
 import CollectionControl from "./components/CollectionControl";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-
-const filtersList = {
-  released: true,
-  unreleased: false,
-  legendary: false,
-  mythical: false,
-  mega: false,
-  baby: true,
-  gmax: false,
-};
 
 function Pokedex({ sorting, query }) {
+  const [filters, setFilters] = useState([]);
   const [pokemonData, setPokemonData] = useState(
     JSON.parse(localStorage.getItem("pokelist")) || ""
   );
-
-  const [filters, setFilters] = useState(filtersList);
-  const [collection, setCollection] = useState(
-    JSON.parse(localStorage.getItem("collection")) || []
-  );
-
   const [collections, setCollections] = useState(
     JSON.parse(localStorage.getItem("collection")) || []
   );
-
-  const [addCollectionValue, setAddCollectionValue] = useState("");
-
-  const [re, setRe] = useState(1);
-
-  const addCollection = (col) => {
-    var collectionList = collections;
-    var newCol = {
-      text: col,
-      pokemon: [],
-    };
-
-    collectionList.push(newCol);
-    setCollections(collectionList);
-  };
 
   useEffect(async () => {
     if (!pokemonData) {
@@ -54,8 +21,6 @@ function Pokedex({ sorting, query }) {
       localStorage.setItem("pokelist", JSON.stringify(newPokeList));
     }
   }, []);
-
-  //   useEffect(() => {}, [collection]);
 
   const pokemonComp = useMemo(() => {
     if (!pokemonData) return "";
@@ -99,18 +64,19 @@ function Pokedex({ sorting, query }) {
       if (!filters["baby"]) pl = pl.filter((p) => !p.tags.includes("baby"));
       if (!filters["unreleased"]) pl = pl.filter((p) => p.released);
       if (!filters["released"]) pl = pl.filter((p) => !p.released);
+      if (!filters["g1"]) pl = pl.filter((p) => p.gen != 1);
+      if (!filters["g2"]) pl = pl.filter((p) => p.gen != 2);
+      if (!filters["g3"]) pl = pl.filter((p) => p.gen != 3);
+      if (!filters["g4"]) pl = pl.filter((p) => p.gen != 4);
+      if (!filters["g5"]) pl = pl.filter((p) => p.gen != 5);
+      if (!filters["g6"]) pl = pl.filter((p) => p.gen != 6);
+      if (!filters["g7"]) pl = pl.filter((p) => p.gen != 7);
+      if (!filters["g8"]) pl = pl.filter((p) => p.gen != 8);
     }
 
     localStorage.setItem("collection", JSON.stringify(collections));
     return pl;
-  }, [pokemonData, sorting, query, filters, collection, re]);
-
-  const handleOnChange = (value) => {
-    // const value = e.target.value;
-    const nf = Object.assign({}, filters);
-    nf[value] = !filters[value];
-    setFilters(nf);
-  };
+  }, [pokemonData, sorting, query, filters, collections]);
 
   function getCurrentCollection(col) {
     var newCollection = col.filter((obj) => {
@@ -122,52 +88,23 @@ function Pokedex({ sorting, query }) {
   function addToCollection(id) {
     const newCollection = [...collections];
     var currentCollection = getCurrentCollection(newCollection);
+    if (!currentCollection) return;
     currentCollection = currentCollection.pokemon;
     var index = currentCollection.indexOf(id);
 
     if (index !== -1) currentCollection.splice(index, 1);
     else currentCollection.push(id);
 
-    updateCollection(newCollection);
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!addCollectionValue) return;
-    addCollection(addCollectionValue);
-    setAddCollectionValue("");
-  };
-
-  function updateCollection(newCollection) {
     setCollections(newCollection);
-    setRe(re * -1);
   }
 
   return (
     <div className="PokedexArea">
       <div className="TitleSection">
-        <CollectionControl collections={collections} updateCollection={updateCollection} />
-        <form onSubmit={handleSubmit} className="CollectionForm">
-          <TextField
-            id="standard-basic"
-            label="Add new collection"
-            onChange={(e) => setAddCollectionValue(e.target.value)}
-            value={addCollectionValue}
-            size="small"
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            size="small"
-            className="AddCollectionButton"
-          >
-            <AddIcon />
-          </Button>
-        </form>
-        <HeaderFilters filters={filters} change={(e) => handleOnChange(e)} />
+        <CollectionControl collections={collections} updateCollection={setCollections} />
+        <HeaderFilters filters={filters} setFilters={setFilters} />
       </div>
-      <PokeTable data={pokemonComp} select={addToCollection} re={re} />
+      <PokeTable data={pokemonComp} select={addToCollection} />
     </div>
   );
 }
