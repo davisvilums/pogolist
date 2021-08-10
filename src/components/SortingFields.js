@@ -4,6 +4,20 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Tooltip from "@material-ui/core/Tooltip";
+import styled from "styled-components";
+
+const ButtonGroupS = styled(ButtonGroup)`
+  margin: 0 20px 0 auto;
+`;
+const ButtonS = styled(Button)`
+  line-height: 1em;
+  padding-left: 25px;
+  color: rgb(255 255 255 / 80%);
+  border-color: rgb(255 255 255 / 80%);
+`;
+const SortingArrow = styled.span`
+  width: 20px;
+`;
 
 export default function SortingFields({ sorting, onSorting }) {
   const [sf, setSortingField] = useState(sorting.field);
@@ -17,32 +31,32 @@ export default function SortingFields({ sorting, onSorting }) {
   };
   return (
     <Tooltip title="Sort by:" placement="left" arrow>
-      <ButtonGroup aria-label="small outlined button group" className="PokemonSort">
-        <Button onClick={() => onSortingChange("cp")}>
+      <ButtonGroupS aria-label="small outlined button group">
+        <ButtonS onClick={() => onSortingChange("cp")}>
           CP{" "}
-          <span className="sortingArrow">
+          <SortingArrow>
             {sf && sf === "cp" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
-          </span>
-        </Button>
-        <Button onClick={() => onSortingChange("name")}>
+          </SortingArrow>
+        </ButtonS>
+        <ButtonS onClick={() => onSortingChange("name")}>
           Name{" "}
-          <span className="sortingArrow">
+          <SortingArrow>
             {sf && sf === "name" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
-          </span>
-        </Button>
-        <Button onClick={() => onSortingChange("order")}>
+          </SortingArrow>
+        </ButtonS>
+        <ButtonS onClick={() => onSortingChange("order")}>
           Order{" "}
-          <span className="sortingArrow">
+          <SortingArrow>
             {sf && sf === "order" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
-          </span>
-        </Button>
-        <Button onClick={() => onSortingChange("id")}>
+          </SortingArrow>
+        </ButtonS>
+        <ButtonS onClick={() => onSortingChange("id")}>
           ID{" "}
-          <span className="sortingArrow">
+          <SortingArrow>
             {sf && sf === "id" && (so === "asc" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />)}
-          </span>
-        </Button>
-      </ButtonGroup>
+          </SortingArrow>
+        </ButtonS>
+      </ButtonGroupS>
     </Tooltip>
   );
 }

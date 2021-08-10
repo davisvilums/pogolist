@@ -3,7 +3,7 @@ import Chip from "@material-ui/core/Chip";
 import DoneIcon from "@material-ui/icons/Done";
 import Tooltip from "@material-ui/core/Tooltip";
 
-const filtersList = {
+const filters = {
   released: true,
   unreleased: false,
   normal: true,
@@ -22,18 +22,27 @@ const filtersList = {
   g8: true,
 };
 
-export default function TagFilters({ filters, setFilters }) {
-  useEffect(() => {
-    setFilters(filtersList);
-  }, []);
+export function pokeFilter(pl, filters) {
+  if (!filters["normal"]) pl = pl.filter((p) => p.tags.length);
+  if (!filters["mega"]) pl = pl.filter((p) => !p.tags.includes("mega"));
+  if (!filters["gmax"]) pl = pl.filter((p) => !p.tags.includes("gmax"));
+  if (!filters["legendary"]) pl = pl.filter((p) => !p.tags.includes("legendary"));
+  if (!filters["mythical"]) pl = pl.filter((p) => !p.tags.includes("mythical"));
+  if (!filters["baby"]) pl = pl.filter((p) => !p.tags.includes("baby"));
+  if (!filters["unreleased"]) pl = pl.filter((p) => p.released);
+  if (!filters["released"]) pl = pl.filter((p) => !p.released);
+  if (!filters["g1"]) pl = pl.filter((p) => p.gen !== 1);
+  if (!filters["g2"]) pl = pl.filter((p) => p.gen !== 2);
+  if (!filters["g3"]) pl = pl.filter((p) => p.gen !== 3);
+  if (!filters["g4"]) pl = pl.filter((p) => p.gen !== 4);
+  if (!filters["g5"]) pl = pl.filter((p) => p.gen !== 5);
+  if (!filters["g6"]) pl = pl.filter((p) => p.gen !== 6);
+  if (!filters["g7"]) pl = pl.filter((p) => p.gen !== 7);
+  if (!filters["g8"]) pl = pl.filter((p) => p.gen !== 8);
+  return pl;
+}
 
-  const handleOnChange = (value) => {
-    // const value = e.target.value;
-    const nf = Object.assign({}, filters);
-    nf[value] = !filters[value];
-    setFilters(nf);
-  };
-
+export default function TagFilters() {
   return (
     <Tooltip title="Filter by criteria" placement="right" arrow>
       <div className="PokemonFilters">
@@ -45,7 +54,9 @@ export default function TagFilters({ filters, setFilters }) {
               color="primary"
               deleteIcon={<DoneIcon />}
               color={filters[f] ? "primary" : ""}
-              onClick={() => handleOnChange(f)}
+              onClick={() => {
+                filters[f] = !filters[f];
+              }}
             />
           ))}
       </div>

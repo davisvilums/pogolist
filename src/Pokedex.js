@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 
 import PokeTable from "./components/PokeTable";
-import HeaderFilters from "./components/TagFilters";
+import HeaderFilters, { pokeFilter } from "./components/TagFilters";
 import GetDataGrahp from "./components/GetDataGrahp";
 import CollectionControl from "./components/CollectionControl";
 import DataImportExport from "./components/DataImportExport";
@@ -67,24 +67,7 @@ function Pokedex({ sorting, query }) {
       }
     });
 
-    if (filters) {
-      if (!filters["normal"]) pl = pl.filter((p) => p.tags.length);
-      if (!filters["mega"]) pl = pl.filter((p) => !p.tags.includes("mega"));
-      if (!filters["gmax"]) pl = pl.filter((p) => !p.tags.includes("gmax"));
-      if (!filters["legendary"]) pl = pl.filter((p) => !p.tags.includes("legendary"));
-      if (!filters["mythical"]) pl = pl.filter((p) => !p.tags.includes("mythical"));
-      if (!filters["baby"]) pl = pl.filter((p) => !p.tags.includes("baby"));
-      if (!filters["unreleased"]) pl = pl.filter((p) => p.released);
-      if (!filters["released"]) pl = pl.filter((p) => !p.released);
-      if (!filters["g1"]) pl = pl.filter((p) => p.gen !== 1);
-      if (!filters["g2"]) pl = pl.filter((p) => p.gen !== 2);
-      if (!filters["g3"]) pl = pl.filter((p) => p.gen !== 3);
-      if (!filters["g4"]) pl = pl.filter((p) => p.gen !== 4);
-      if (!filters["g5"]) pl = pl.filter((p) => p.gen !== 5);
-      if (!filters["g6"]) pl = pl.filter((p) => p.gen !== 6);
-      if (!filters["g7"]) pl = pl.filter((p) => p.gen !== 7);
-      if (!filters["g8"]) pl = pl.filter((p) => p.gen !== 8);
-    }
+    pl = pokeFilter(pl, filters);
 
     localStorage.setItem("collection", JSON.stringify(collections));
     return pl;

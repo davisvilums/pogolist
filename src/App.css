@@ -27,25 +27,13 @@ body h1 {
 .TitleSection {
   position: fixed;
   background-color: #5dbaff;
-  width: 260px;
+  width: 300px;
   text-align: center;
   padding: 10px 0 50px;
   color: #fff;
   height: 100vh;
   max-height: calc(100vh - 64px);
   overflow: scroll;
-}
-.PokemonSort {
-  margin: 0 20px 0 auto;
-}
-.PokemonSort button {
-  line-height: 1em;
-  padding-left: 25px;
-  color: rgb(255 255 255 / 80%);
-  border-color: rgb(255 255 255 / 80%);
-}
-.sortingArrow {
-  width: 20px;
 }
 .listHead {
   display: flex;
@@ -117,89 +105,9 @@ li.TableRow {
   flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
-  padding-left: 260px;
+  padding-left: 300px;
   padding-top: 5px;
   width: 100%;
-}
-.pokemonItem {
-  border: 1px solid #ddd;
-  width: 100px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-  margin: 0 -1px -1px 0;
-  cursor: pointer;
-}
-.pokemonItem.selected {
-  background: #c7dbec;
-}
-.pokemonID {
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-weight: bold;
-  font-size: 12px;
-  padding: 1px 3px;
-}
-.pokemonGeneration {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-weight: bold;
-  font-size: 12px;
-  /* background: #ddd; */
-  padding: 1px 3px;
-  cursor: pointer;
-}
-.pokemonSpriteWrap {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 5px;
-}
-.pokemonSprite {
-  max-width: 100%;
-  max-height: 100px;
-}
-.PokemonMeta {
-  background: #eee;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.pokemonName {
-  font-size: 15px;
-  text-align: center;
-  text-transform: capitalize;
-  font-weight: bold;
-  max-width: 100%;
-  line-height: 0.9em;
-  min-height: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.pokemonName10 {
-  font-size: 14px;
-}
-.pokemonName12 {
-  font-size: 13px;
-}
-.pokemonName15 {
-  font-size: 13px;
-}
-.pokemonCP {
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1em;
-  background: #eee;
-}
-.pokemonData {
-  text-align: center;
-  font-size: 12px;
 }
 
 td {
