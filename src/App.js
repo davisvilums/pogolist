@@ -83,7 +83,7 @@ function App() {
             onClick={handleDrawerOpen}
             className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
           >
-            <MenuIcon />213452e
+            <MenuIcon />213452e try again
           </IconButton> */}
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Personal Pokedex
