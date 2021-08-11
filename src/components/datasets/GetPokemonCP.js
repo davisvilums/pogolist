@@ -10,15 +10,11 @@ function GetPokemonCP(pStats) {
   var SeedMod = 1 + (BSpeed - 75) / 500;
 
   var Base_Attack = Math.round(
-    ((1 / 4) * Math.min(BAttack, SAttack) +
-      (7 / 4) * Math.max(BAttack, SAttack)) *
-      SeedMod
+    ((1 / 4) * Math.min(BAttack, SAttack) + (7 / 4) * Math.max(BAttack, SAttack)) * SeedMod
   );
 
   var Base_Defense = Math.round(
-    ((3 / 4) * Math.min(BDefense, SDefense) +
-      (5 / 4) * Math.max(BDefense, SDefense)) *
-      SeedMod
+    ((3 / 4) * Math.min(BDefense, SDefense) + (5 / 4) * Math.max(BDefense, SDefense)) * SeedMod
   );
 
   var Base_HP = Math.floor(BStamina * 1.75 + 50);

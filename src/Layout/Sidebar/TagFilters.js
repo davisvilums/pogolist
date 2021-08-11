@@ -1,7 +1,15 @@
-import { useEffect } from "react";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from "@material-ui/icons/Done";
 import Tooltip from "@material-ui/core/Tooltip";
+import styled from "styled-components";
+
+const PokemonFilters = styled.div`
+  border-top: 1px solid rgb(224 224 224 / 70%);
+  padding-top: 10px;
+  & > div {
+    margin: 0 0.2em;
+  }
+`;
 
 const filters = {
   released: true,
@@ -22,7 +30,7 @@ const filters = {
   g8: true,
 };
 
-export function pokeFilter(pl, filters) {
+export function pokeFilter(pl) {
   if (!filters["normal"]) pl = pl.filter((p) => p.tags.length);
   if (!filters["mega"]) pl = pl.filter((p) => !p.tags.includes("mega"));
   if (!filters["gmax"]) pl = pl.filter((p) => !p.tags.includes("gmax"));
@@ -42,10 +50,14 @@ export function pokeFilter(pl, filters) {
   return pl;
 }
 
-export default function TagFilters() {
+export default function TagFilters({ setFilters }) {
+  const handleOnChange = (value) => {
+    filters[value] = !filters[value];
+    setFilters(filters);
+  };
   return (
     <Tooltip title="Filter by criteria" placement="right" arrow>
-      <div className="PokemonFilters">
+      <PokemonFilters>
         {filters &&
           Object.keys(filters).map((f) => (
             <Chip
@@ -54,12 +66,10 @@ export default function TagFilters() {
               color="primary"
               deleteIcon={<DoneIcon />}
               color={filters[f] ? "primary" : ""}
-              onClick={() => {
-                filters[f] = !filters[f];
-              }}
+              onClick={() => handleOnChange(f)}
             />
           ))}
-      </div>
+      </PokemonFilters>
     </Tooltip>
   );
 }

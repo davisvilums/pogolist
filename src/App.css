@@ -81,13 +81,6 @@ li.TableRow {
 .DeleteIcon {
   cursor: pointer;
 }
-.PokemonFilters {
-  border-top: 1px solid rgb(224 224 224 / 70%);
-  padding-top: 10px;
-}
-.PokemonFilters > div {
-  margin: 0 0.2em;
-}
 .CollectionForm {
   display: flex;
   align-items: flex-end;

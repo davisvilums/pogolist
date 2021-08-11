@@ -8,7 +8,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import SortingFields from "./components/SortingFields";
+import SortingFields from "./Layout/Header/SortingFields";
 
 import Pokedex from "./Pokedex";
 

@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
 
-import PokeTable from "./components/PokeTable";
-import HeaderFilters, { pokeFilter } from "./components/TagFilters";
+import PokeTable from "./Layout/Content/PokeTable";
+import HeaderFilters, { pokeFilter } from "./Layout/Sidebar/TagFilters";
 import GetDataGrahp from "./components/GetDataGrahp";
-import CollectionControl from "./components/CollectionControl";
-import DataImportExport from "./components/DataImportExport";
+import CollectionControl from "./Layout/Sidebar/CollectionControl";
+import DataImportExport from "./Layout/Sidebar/DataImportExport";
 
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -13,6 +13,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 function Pokedex({ sorting, query }) {
   const [open, setOpen] = useState(false);
+  const [r, setR] = useState(1);
   const [filters, setFilters] = useState([]);
   const [pokemonData, setPokemonData] = useState(
     JSON.parse(localStorage.getItem("pokelist")) || ""
@@ -67,11 +68,11 @@ function Pokedex({ sorting, query }) {
       }
     });
 
-    pl = pokeFilter(pl, filters);
+    pl = pokeFilter(pl);
 
     localStorage.setItem("collection", JSON.stringify(collections));
     return pl;
-  }, [pokemonData, sorting, query, filters, collections]);
+  }, [pokemonData, sorting, query, filters, collections, r]);
 
   function getCurrentCollection(col) {
     var newCollection = col.filter((obj) => {
@@ -96,11 +97,15 @@ function Pokedex({ sorting, query }) {
     setCollections(newCollection);
   }
 
+  function filterFunc(vals) {
+    setR(r * -1);
+    setFilters(vals);
+  }
   return (
     <div className="PokedexArea">
       <div className="TitleSection">
         <CollectionControl collections={collections} updateCollection={setCollections} />
-        <HeaderFilters filters={filters} setFilters={setFilters} />
+        <HeaderFilters setFilters={filterFunc} />
         <DataImportExport updateCollection={setCollections} />
       </div>
       <PokeTable data={pokemonComp} select={addToCollection} />
