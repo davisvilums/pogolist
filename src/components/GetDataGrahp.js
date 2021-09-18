@@ -1,12 +1,18 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import GetPokemonCP from "./datasets/GetPokemonCP";
-import ReleasedList from "./datasets/ReleasedList";
+// import ReleasedList from "./datasets/ReleasedList";
 import ExcludeList from "./datasets/ExcludeList";
 
 const client = new ApolloClient({
   uri: "https://beta.pokeapi.co/graphql/v1beta",
   cache: new InMemoryCache({}),
 });
+
+var releasedList;
+fetch("./data/released.json")
+  .then((response) => response.json())
+  .then((data) => (releasedList = data.released));
+// .then((data) => console.log(data.released));
 
 const getPokemonQuery = gql`
   {
@@ -60,7 +66,7 @@ async function GetDataGrahp() {
         pok.visible = true;
         pok.released = false;
 
-        if (ReleasedList.includes(pok.id)) pok.released = true;
+        if (releasedList.includes(pok.id)) pok.released = true;
         if (pokemon.pokemon_v2_pokemonspecy.is_baby) pok.tags.push("baby");
         if (pokemon.pokemon_v2_pokemonspecy.is_legendary) pok.tags.push("legendary");
         if (pokemon.pokemon_v2_pokemonspecy.is_mythical) pok.tags.push("mythical");
